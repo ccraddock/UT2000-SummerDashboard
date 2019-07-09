@@ -1,7 +1,0 @@
-Variables to use for my component of the UT2000 Summer Dashboard:
-- Sleep Stages
-- PM2.5 Concentration
-- Temperature
-- Relative Humidity
-- Beiwe EMA Studies (sleep questions only)
-- GPS 
