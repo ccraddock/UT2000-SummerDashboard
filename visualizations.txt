@@ -1,0 +1,13 @@
+Visualizations to consider for my component of the UT2000 Summer Dashboard:
+- Bar Chart showing percentage of time spent in non-rem, rem, and awake sleep stages
+- Time Series showing daily PM2.5 concentrations in their home
+- Time Series showing daily AQI for PM2.5 in their home
+- Bar Chart comparing the daily median concentrations in their home versus the aggregate
+- Time Series showing temperature profile over the day
+- Bar Chart comparing the average daily and average nightly temperatures to the aggregate
+- Bar Chart comparing the percentage of time spent out of thermal comfort zone in their house versus the aggregate
+- Scatterplot showing relationship between sleep efficiency and the perceived sleep quality
+- Scatterplot showing the relationship between their sleep efficiency and the peak PM2.5 concentration while they are asleep
+- Scatterplot showing the relationship between their perceived sleep quality and the peak PM2.5 concentration while they are asleep
+- Scatterplot showing the relationship between their sleep efficiency and thee median PM2.5 concentration
+- Scatterplot showing the relationship between their perceived sleep quality and the median PM2.5 concentration
