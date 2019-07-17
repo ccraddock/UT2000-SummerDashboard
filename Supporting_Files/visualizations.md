@@ -30,7 +30,6 @@ Temperature and Relative Humidity
 2. Scatterplot showing relationship between sleep efficiency and the perceived sleep quality
   - Will have to score the perceived sleep quality in some manner
 3. Scatterplot showing the relationship between their sleep efficiency and the peak PM2.5 concentration while they are asleep
-  - Will have to parse out the PM concentration during the times that people are asleep
 4. Scatterplot showing the relationship between their perceived sleep quality and the peak PM2.5 concentration while they are asleep
-5. Scatterplot showing the relationship between their sleep efficiency and thee median PM2.5 concentration while they are asleep
+5. Scatterplot showing the relationship between their sleep efficiency and the median PM2.5 concentration while they are asleep
 6. Scatterplot showing the relationship between their perceived sleep quality and the median PM2.5 concentration while they are asleep
