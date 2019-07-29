@@ -1,4 +1,4 @@
-Month,Day,Time_Asleep,Restful,Refreshed,Aggregate,Refresh+Relax,Weighted,Date,Count
+Month,Day,Time_Asleep,Restful,Refreshed,Aggregate,Refresh+Relax,Normalized,Date,Count
 3,12,3.0,1.0,1.0,5.0,2.0,1.0416666666666665,2019-03-12,2
 3,13,3.125,1.0,1.0,5.125,2.0,1.0572916666666665,2019-03-13,4
 3,14,3.5,1.6666666666666667,1.3333333333333333,6.5,3.0,1.4375,2019-03-14,3
