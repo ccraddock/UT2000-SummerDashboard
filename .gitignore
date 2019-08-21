@@ -1,4 +1,4 @@
 *.ppt
 *.pptx
 *.MOV
-.DS_Store
+*.DS_Store*
