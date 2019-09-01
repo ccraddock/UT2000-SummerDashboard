@@ -11,6 +11,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
 from pm.models import PM
 import csv
+import pandas
 
 dataReader = csv.reader(open(csv_filepathname), delimiter=',', quotechar='"')
 for row in dataReader:
