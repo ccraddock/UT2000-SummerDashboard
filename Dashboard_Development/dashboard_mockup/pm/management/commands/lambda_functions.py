@@ -401,21 +401,25 @@ def importIAQ(DIR, starting='03/11/2019', ending='04/15/2019'):
 
 # Fitbit Sleep Stages #
 # -------------------------------------------------------------- #
-def importSleepStages(starting='03/11/2019', ending='04/15/2019'):
+def importSleepMetrics(DIR, starting='03/11/2019', ending='04/15/2019'):
     '''
     Inputs:
+        - DIR: path to where the data is located
         - starting: string representing the first date to use in the data range
         - ending: string representing the last date to use in the data range
-    Returns a dataframe containing the timestamp and the measured variables that correspond to the file_name variable
+    Returns a DataFrame and two Series of DataFrames:
+        - DataFrame holding the aggregate sleep metric data 
+        - Series indexed by ID holding the sleep stages label
+        - Series indexed by ID holding the sleep metric data for the individual
     '''
     stages_byID = pd.Series()
     # Importing and cleaning the data
-    for folder in os.listdir('Data/'):
+    for folder in os.listdir(DIR):
         if folder[0] != '.':
             ## Important variables
-            DIR = 'Data/' + folder + '/' # Location of file
+            file_dir = DIR + folder + '/' # Location of file
             try:
-                raw_data = pd.read_csv(DIR + 'SleepStages.csv',header=0,names=['Time','ShortWakes','Stage_Label'],usecols=[1,3,4])
+                raw_data = pd.read_csv(file_dir + 'SleepStages.csv',header=0,names=['Time','ShortWakes','Stage_Label'],usecols=[1,3,4])
                 ## Converting the time column to datetime
                 raw_data['Time'] = pd.to_datetime(raw_data['Time'], format="%m/%d/%Y %I:%M:%S %p")
                 raw_data = raw_data.set_index('Time') # Setting time as the dataframe index
@@ -543,7 +547,7 @@ def importSleepStages(starting='03/11/2019', ending='04/15/2019'):
         df = pd.DataFrame(data=d)
         # Individual Data
         sleep_metrics_byID[name] = df.set_index('Night')
-        sleep_metrics_byID[name].to_csv('Files/' + name + '_FitbitSQ.csv')
+        #sleep_metrics_byID[name].to_csv('Files/' + name + '_FitbitSQ.csv')
         # Aggregate Data
         df['ID'] = name
         sleep_metrics = pd.concat([sleep_metrics,df],axis=0,ignore_index=True)
@@ -551,25 +555,27 @@ def importSleepStages(starting='03/11/2019', ending='04/15/2019'):
     nightly_mean = sleep_metrics.groupby(['Night']).mean()
     nightly_count = sleep_metrics.groupby(['Night']).count()
     nightly_mean['Count'] = nightly_count['Time_Asleep']
-    nightly_mean.to_csv('Files/Aggregate_FitbitSQ.csv')
+    #nightly_mean.to_csv('Files/Aggregate_FitbitSQ.csv')
     
-    return stages_byID, sleep_metrics_byID, nightly_mean
+    return nightly_mean, stages_byID, sleep_metrics_byID
 
 # Biewe Sleep Surveys #
 # --------------------------------------------------------------- #
-def lambdaSleepSurveys(starting='03/11/2019', ending='04/15/2019'):
+def importSleepSurveys(DIR, starting='03/11/2019', ending='04/15/2019'):
     '''
     Inputs:
         - starting: string representing the first date to use in the data range
         - ending: string representing the last date to use in the data range
-    Returns dataframes for each individual's survey answers and the aggregate answers 
+    Returns a DataFrame and Series of DataFrames:
+        - DataFrame holding the aggregate survey answers and derivatives
+        - Series indexed by the user's ID holding DataFrames of the survey answers and derivatives
     '''
     sleep_surveys_byID = pd.Series()
     sleep_surveys = pd.DataFrame()
     # Importing and Cleaning the Data
-    for folder in os.listdir('Data/'):
+    for folder in os.listdir(DIR):
         if folder[0] != '.':
-            DIR = 'Data/' + folder + '/beiwe_data/sleep_surveys/' # Location of file
+            file_dir = DIR + folder + '/beiwe_data/sleep_surveys/' # Location of file
 
             ## Important variables
             nights = []
@@ -584,7 +590,7 @@ def lambdaSleepSurveys(starting='03/11/2019', ending='04/15/2019'):
             start_date = datetime.strptime(starting, '%m/%d/%Y') # converting input to datetime
             end_date = datetime.strptime(ending, '%m/%d/%Y') # converting input to datetime
 
-            for file in os.listdir(DIR):
+            for file in os.listdir(file_dir):
                 numerics = []
                 # Checking to see if the file is a csv and that date already hasn't been imported
                 if file[-3:] == 'csv':
@@ -592,7 +598,7 @@ def lambdaSleepSurveys(starting='03/11/2019', ending='04/15/2019'):
                     # Checking to make sure we stay in the date range
                     if file_date > start_date and file_date <= end_date:
                         nights.append(file_date)
-                        raw_data = pd.read_csv(DIR + file,header=None,usecols=[2,4],skiprows=1,nrows=4,names=['Question','Answer'])
+                        raw_data = pd.read_csv(file_dir + file,header=None,usecols=[2,4],skiprows=1,nrows=4,names=['Question','Answer'])
                         if raw_data['Question'][0][:4] == '9:00':
                             ## Getting average number of hours slept
                             if str(raw_data['Answer'][1]).upper() == 'NAN' or raw_data['Answer'][1] == 'NOT_PRESENTED':
@@ -646,7 +652,7 @@ def lambdaSleepSurveys(starting='03/11/2019', ending='04/15/2019'):
                 df = df.set_index('Night')
                 sleep_surveys = pd.concat([sleep_surveys,df],axis=0)
                 sleep_surveys_byID[folder] = df.sort_index()
-                sleep_surveys_byID[folder].to_csv('Files/' + folder + '_BeiweSQ.csv')
+                #sleep_surveys_byID[folder].to_csv('Files/' + folder + '_BeiweSQ.csv')
     
     # Getting Aggregate Data
     sleep_surveys['Month'] = sleep_surveys.index.month
@@ -659,9 +665,9 @@ def lambdaSleepSurveys(starting='03/11/2019', ending='04/15/2019'):
         dates.append(datetime(start_date.year,survey_mean.index[i][0],survey_mean.index[i][1]))
     survey_mean['Date'] = dates # Attaching new column
     survey_mean['Count'] = survey_count['Time_Asleep']
-    survey_mean.to_csv('Files/Aggregate_BeiweSQ.csv')
+    #survey_mean.to_csv('Files/Aggregate_BeiweSQ.csv')
 
-    return sleep_surveys_byID, survey_mean
+    return survey_mean, sleep_surveys_byID
 
 # ----------------- #
 # Support Functions #
