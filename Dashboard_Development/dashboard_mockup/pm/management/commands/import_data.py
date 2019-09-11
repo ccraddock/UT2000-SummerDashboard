@@ -1,7 +1,7 @@
 # Import for command modules
 from django.core.management.base import BaseCommand, CommandError
 # Import of django models
-from pm.models import Identifier
+from pm.models import ID_Label
 from pm.models import PM
 from pm.models import Thermal
 from pm.models import SleepMetrics
@@ -39,13 +39,13 @@ class Command(BaseCommand):
             ## Putting data into models
             for name in srs_hourly.index:
                 ### ID model
-                #ID = Identifier(id_label=name)
-                #ID.save()     
+                ID = ID_Label(name=name)
+                ID.save()     
                 self.stdout.write(self.style.SUCCESS('Succesfully saved ID to database'))
                 data = srs_hourly[name]
                 for i in range(len(data)):
                     ### Thermal model
-                    thermal = Thermal(identifier=name,
+                    thermal = Thermal(id_label=ID,
                         name=name,
                         temperature=data['Temperature(F)'][i],
                         rh=data['Relative Humidity'][i],
